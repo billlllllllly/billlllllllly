@@ -44,3 +44,15 @@ while (1 == keepgoing):
         print("  {0} {1}".format(vocablist[answer[correctanswer]]["English"],vocablist[answer[correctanswer]]["Chinese"]))
         print("  {0} {1}".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
     print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
+    
+    
+    #keep/reset weight?
+ksweight = input("keep or reset weight? [k/r/n]")
+if('y' == ksweight):
+    for i in range(len(x)):
+        vocablist[i]["weight"] = weight[i]
+        vocabfile.write(vocablist[i])
+elif('s' == ksweight):
+    for i in range(len(x)):
+        vocablist[i]["weight"] = 5
+        vocabfile.write(vocablist[i])
