@@ -7,7 +7,7 @@ for i in range(len(inputfiledata)):
     vocablistfile.write(inputfiledata[i].split()[0])
     vocablistfile.write("\", \"Chinese\":\"")
     vocablistfile.write(inputfiledata[i].split()[1])
-    vocablistfile.write("\", \"weight\":5}\n")
+    vocablistfile.write("\", \"weight\":2}\n")
 
 
 inputfile.close()
