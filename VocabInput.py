@@ -1,7 +1,5 @@
-#making well formated file
-
-inputfile = open("VocabInput.txt", "r", encoding='utf-16')
-vocablistfile = open("VocabM4-12", "w", encoding='utf-16')
+inputfile = open("VocabInput.txt", "r", encoding='utf-8')
+vocablistfile = open("VocabM4-12.txt", "w", encoding='utf-8')
 
 inputfiledata = inputfile.readlines()
 for i in range(len(inputfiledata)):
