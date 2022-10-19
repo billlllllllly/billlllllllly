@@ -21,13 +21,9 @@ accuracy = 0.0
 keepgoing = 1
 while (1 == keepgoing):
     correctanswer = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
-    #print(f"correctanswer:{correctanswer}")
-    #while(answer.copy().sort()[0]==answer.copy().sort()[1] or answer.copy().sort()[1]==answer.copy().sort()[2] or answer.copy().sort()[2]==answer.copy().sort()[3]):
-    #    answer = random.choices([i for i in range(0,len)], weights=weight, k=4)
     answer = random.choices([i for i in range(0,len)], k=3)
     correctanswerinsertidx = random.randint(0,3)
     answer.insert(correctanswerinsertidx,correctanswer)
-    #print(F"answer:{answer}")
     target_language = random.randint(0,1)
     
     if target_language == 0:
@@ -44,12 +40,12 @@ while (1 == keepgoing):
         accuracy = (correctnum/totalnum)*100
         print(f"\nacccuracy:{accuracy}%\n")
     elif (answer[userinput - 1] == correctanswer):
-        weight[correctanswer] += 2
-        weight[answer[userinput-1]] += 2
+        weight[correctanswer] -= 1
+        weight[answer[userinput-1]] -= 1
         correctnum += 1
         totalnum += 1
     else:
-        weight[correctanswer] -= 1
+        weight[correctanswer] += 2
         totalnum += 1
         print("  {0} {1}".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
         print("  {0} {1}".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
@@ -58,13 +54,13 @@ while (1 == keepgoing):
 #keep/reset weight?
 keepweight = input("keep weight? [y/n]")
 if('y' == keepweight):
-    for i in range(len(x)):
+    for i in range(len):
         vocablist[i]["weight"] = weight[i]
         vocabfile.write(vocablist[i])
 
 resetweight = input("reset weight? [y/n]")
 if('y' == resetweight):
     with open("VocabM4-12.txt", "w", encoding='utf-8') as file:
-        for i in range(len(x)):
+        for i in range(len):
             vocablist[i]["weight"] = 2
             file.write()
