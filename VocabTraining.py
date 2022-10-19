@@ -19,8 +19,15 @@ keepgoing = 1
 
 #funtion define (choice)
 def mutiple_choice():
+    global correctnum
+    global totalnum
+    global keepgoing
     correctanswer = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
-    answer = random.choices([i for i in range(0,len)], k=3)
+    anserror = 1
+    while (anserror == 1):
+        answer = random.choices([i for i in range(0,len)], k=3)
+        if(answer.count(answer[0]) == 1 and answer.count(answer[1]) == 1 and answer.count(correctanswer) == 0):
+            anserror = 0
     correctanswerinsertidx = random.randint(0,3)
     answer.insert(correctanswerinsertidx,correctanswer)
     target_language = random.randint(0,1)
@@ -36,14 +43,11 @@ def mutiple_choice():
     
     if (userinput == -1):
         keepgoing = -1
-        accuracy = (correctnum/totalnum)*100
         print(f"\nacccuracy:{accuracy}%\n")
     elif (answer[userinput - 1] == correctanswer):
         weight[correctanswer] -= 1
         weight[answer[userinput-1]] -= 1
-        global correctnum
         correctnum += 1
-        global totalnum
         totalnum += 1
     else:
         weight[correctanswer] += 2
@@ -53,34 +57,50 @@ def mutiple_choice():
     print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
 
 #funtion define (hand write)
-def handwrite():
-    correctanswer = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
-    print("{0} {1}_____".format(vocabfile[correctanswer]["Chinese"], vocabfile[correctanswer]["English"][:2]))
+def handwrite(i):
+    global correctnum
+    global totalnum
+    print("{0} {1}_____".format(vocablist[i]["Chinese"], vocablist[i]["English"][:2]))
     userinput = str(input())
-    if(userinput == vocabfile[correctanswer]["English"]):
-        print("---------------------------------------")
+    if(userinput == vocablist[i]["English"]):
+        correctnum += 1
+        totalnum += 1
+        print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
     else:
-        weight[correctanswer] -= 2
-        print(vocabfile[correctanswer]["English"])
-        print("---------------------------------------")
+        totalnum += 1
+        print("\n  {}".format(vocablist[i]["English"]))
+        print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
 
 
 
 #run
+userinputmode = input("enter mode [mc/hw]")
+if(userinputmode == "mc"):
+    while (1 == keepgoing):
+        mutiple_choice()
+else:
+    random.shuffle(vocablist)
+    for i in range(len):    
+        handwrite(i)
 
-while (1 == keepgoing):
-    mutiple_choice()
+accuracy = (correctnum/totalnum)*100
 
+
+"""
 #keep/reset weight?
 keepweight = input("keep weight? [y/n]")
 if('y' == keepweight):
-    for i in range(len):
-        vocablist[i]["weight"] = weight[i]
-        vocabfile.write(vocablist[i])
+    with open("VocabM4-12.txt", "w", encoding='utf-8') as file:
+        for i in range(len):
+            vocablist[i]["weight"] = weight[i]
+            x = json.dumps(vocablist[i])
+            file.write(x)
 
 resetweight = input("reset weight? [y/n]")
 if('y' == resetweight):
     with open("VocabM4-12.txt", "w", encoding='utf-8') as file:
         for i in range(len):
             vocablist[i]["weight"] = 2
-            file.write()
+            x = json.dumps(vocablist[i])
+            file.write(x)
+"""
