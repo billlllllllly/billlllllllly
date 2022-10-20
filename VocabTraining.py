@@ -86,6 +86,7 @@ else:
         handwrite(i)
 
 accuracy = (correctnum/totalnum)*100
+print(f"accuracy:{accuracy}")
 
 
 """
