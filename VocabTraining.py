@@ -78,6 +78,8 @@ userinputmode = input("enter mode [mc/hw]")
 if(userinputmode == "mc"):
     while (1 == keepgoing):
         mutiple_choice()
+        if(weight.count(0) == len):
+            break
 else:
     random.shuffle(vocablist)
     for i in range(len):    
