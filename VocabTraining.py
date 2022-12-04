@@ -1,8 +1,9 @@
 import random
 import json
 
+
 #data loading
-vocabfile = open("VocabM4-12.txt", "r", encoding='utf-8')
+vocabfile = open("M4-19.txt", "r", encoding='utf-8')
 x = vocabfile.readlines()
 vocablist = []
 weight = []
@@ -34,16 +35,18 @@ def mutiple_choice():
     
     if target_language == 0:
         print(vocablist[correctanswer]["English"])
-        print("(1){0}  (2){1}  (3){2}  (4){3}\n".format(vocablist[answer[0]]["Chinese"],vocablist[answer[1]]["Chinese"],vocablist[answer[2]]["Chinese"],vocablist[answer[3]]["Chinese"]))
+        print("(1){0}\n(2){1}\n(3){2}\n(4){3}\n".format(vocablist[answer[0]]["Chinese"],vocablist[answer[1]]["Chinese"],vocablist[answer[2]]["Chinese"],vocablist[answer[3]]["Chinese"]))
     else:
         print(vocablist[correctanswer]["Chinese"])
-        print("(1){0}  (2){1}  (3){2}  (4){3}\n".format(vocablist[answer[0]]["English"],vocablist[answer[1]]["English"],vocablist[answer[2]]["English"],vocablist[answer[3]]["English"]))
+        print("(1){0}\n(2){1}\n(3){2}\n(4){3}\n".format(vocablist[answer[0]]["English"],vocablist[answer[1]]["English"],vocablist[answer[2]]["English"],vocablist[answer[3]]["English"]))
     
     userinput = input()
     if userinput != '1' and userinput != '2' and userinput != '3' and userinput != '4':
-        print("\033[91m !!! ERROR !!!\033[97m")
+        print("\033[91m !!! INPUT ERROR !!!\033[97m")
         userinput = input()
     userinput = int(userinput)
+
+
     
     if (userinput == -1):
         keepgoing = -1
@@ -56,9 +59,9 @@ def mutiple_choice():
     else:
         weight[correctanswer] += 2
         totalnum += 1
-        print("  {0} {1}".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
-        print("  {0} {1}".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
-    print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
+        print("\033[93m  {0} {1}\033[97m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
+        print("\033[93m  {0} {1}\033[97m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
+    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
 
 #funtion define (hand write)
 def handwrite(i):
@@ -78,7 +81,8 @@ def handwrite(i):
 
 
 #run
-userinputmode = input("enter mode [mc/hw]")
+userinputmode = input("enter mode [mc/hw]  \033[32m")
+print("\033[97m")
 if(userinputmode == "mc"):
     while (1 == keepgoing):
         mutiple_choice()
@@ -102,7 +106,6 @@ if('y' == keepweight):
             vocablist[i]["weight"] = weight[i]
             x = json.dumps(vocablist[i])
             file.write(x)
-
 resetweight = input("reset weight? [y/n]")
 if('y' == resetweight):
     with open("VocabM4-12.txt", "w", encoding='utf-8') as file:
