@@ -42,7 +42,7 @@ def mutiple_choice():
     
     userinput = input()
     if userinput != '1' and userinput != '2' and userinput != '3' and userinput != '4':
-        print("\033[91m !!! INPUT ERROR !!!\033[97m")
+        print("\033[1;91m !!! INPUT ERROR !!!\033[0m")
         userinput = input()
     userinput = int(userinput)
 
@@ -59,9 +59,9 @@ def mutiple_choice():
     else:
         weight[correctanswer] += 2
         totalnum += 1
-        print("\033[93m  {0} {1}\033[97m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
-        print("\033[93m  {0} {1}\033[97m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
-    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
+        print("\033[93m  {0} {1}\033[0m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
+        print("\033[93m  {0} {1}\033[0m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
+    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
 
 #funtion define (hand write)
 def handwrite(i):
@@ -82,7 +82,7 @@ def handwrite(i):
 
 #run
 userinputmode = input("enter mode [mc/hw]  \033[32m")
-print("\033[97m")
+print("\033[0m")
 if(userinputmode == "mc"):
     while (1 == keepgoing):
         mutiple_choice()
