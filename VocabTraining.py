@@ -39,7 +39,11 @@ def mutiple_choice():
         print(vocablist[correctanswer]["Chinese"])
         print("(1){0}  (2){1}  (3){2}  (4){3}\n".format(vocablist[answer[0]]["English"],vocablist[answer[1]]["English"],vocablist[answer[2]]["English"],vocablist[answer[3]]["English"]))
     
-    userinput = int(input())
+    userinput = input()
+    if userinput != '1' and userinput != '2' and userinput != '3' and userinput != '4':
+        print("\033[91m !!! ERROR !!!\033[97m")
+        userinput = input()
+    userinput = int(userinput)
     
     if (userinput == -1):
         keepgoing = -1
