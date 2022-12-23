@@ -4,15 +4,8 @@
 - 💞️ I’m looking to collaborate on ...
 - 📫 How to reach me ...
 
-***
-For hgsh 21117, if you see this passage,
-i can guess that you might be interested in me.
-So ill leave my Instagram here,
-@tmg_billy
-And also,
-very unexpected to receive your letter.
-Have a nice day.
-***
+My Instagram @tmg_billy
+
 
 <!---
 billlllllllly/billlllllllly is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
