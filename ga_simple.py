@@ -11,18 +11,18 @@ def crossover(x1, x2):
     target = random.randint(0, len(x1)-1)
     y1 = []
     y2 = []
-    y1.append(x1[0:target])
-    y1.append(x2[target:])
-    y2.append(x2[0:target])
-    y2.append(x1[target:])
+    y1.extend(x1[0:target])
+    y1.extend(x2[target:])
+    y2.extend(x2[0:target])
+    y2.extend(x1[target:])
     offspring = [y1, y2]
     return offspring
 
 def fitness_caculate(parent):
     rate = []
-    temp = 0.0
+    temp = 0
     for i in range(len(parent)):
-        temp = 0.0
+        temp = 0
         for j in parent[i]:
             temp += parent[i][j]
         rate.append(temp)
@@ -38,27 +38,27 @@ def offspring_making(rate, parents, population = 100):
             oft[0] = mutation(oft[0])
         elif ifmutate == 2:
             oft[1] = mutation(oft[1])
-            offspring.append(oft)
+        offspring.extend(oft)
     return offspring
 
 
 #main
-generation = 100
-population = 100
+generation = 250
+population = 300
 neuro = 20
 parent = []
 for i in range(population):
     individual = []
     for j in range(neuro):
         individual.append(random.randint(0, 9))
-        parent.append(individual)
+    parent.append(individual)
 offspring = []
 rate = []
 for i in range(generation):
     rate = fitness_caculate(parent)
     offspring = offspring_making(rate, parent, population)
     best = 0
-    for j in rate:
+    for j in range(len(rate)):
         if rate[j] > best:
             best = rate[j]
     print(f"best --- {best}")
