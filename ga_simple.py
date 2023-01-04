@@ -11,9 +11,9 @@ def crossover(x1, x2):
     target = random.randint(0, len(x1)-1)
     y1 = []
     y2 = []
-    y1 = x1[0:target]
+    y1.append(x1[0:target])
     y1.append(x2[target:])
-    y2 = x2[0:target]
+    y2.append(x2[0:target])
     y2.append(x1[target:])
     offspring = [y1, y2]
     return offspring
