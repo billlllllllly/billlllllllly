@@ -3,13 +3,15 @@ import json
 
 
 #data loading
-vocabfile = open("M4-19.txt", "r", encoding='utf-8')
+vocabfile = open("temp.txt", "r", encoding = 'utf-8')
 x = vocabfile.readlines()
 vocablist = []
 weight = []
+
 for i in range(len(x)):
     vocablist.append(json.loads(x[i]))
     weight.append(vocablist[i]["weight"])
+    
 len = len(vocablist)
 
 #accuracy
@@ -17,6 +19,8 @@ totalnum = 0
 correctnum = 0
 accuracy = 0.0
 keepgoing = 1
+
+ansappeartime = [0,0,0,0]
 
 #funtion define (choice)
 def mutiple_choice():
@@ -30,6 +34,7 @@ def mutiple_choice():
         if(answer.count(answer[0]) == 1 and answer.count(answer[1]) == 1 and answer.count(correctanswer) == 0):
             anserror = 0
     correctanswerinsertidx = random.randint(0,3)
+    ansappeartime[correctanswerinsertidx] += 1
     answer.insert(correctanswerinsertidx,correctanswer)
     target_language = random.randint(0,1)
     
@@ -40,28 +45,26 @@ def mutiple_choice():
         print(vocablist[correctanswer]["Chinese"])
         print("(1){0}\n(2){1}\n(3){2}\n(4){3}\n".format(vocablist[answer[0]]["English"],vocablist[answer[1]]["English"],vocablist[answer[2]]["English"],vocablist[answer[3]]["English"]))
     
+    
     userinput = input()
-    if userinput != '1' and userinput != '2' and userinput != '3' and userinput != '4':
+    while userinput != '1' and userinput != '2' and userinput != '3' and userinput != '4' and userinput != '-1':
         print("\033[1;91m !!! INPUT ERROR !!!\033[0m")
         userinput = input()
     userinput = int(userinput)
 
 
-    
     if (userinput == -1):
         keepgoing = -1
-        print(f"\nacccuracy:{accuracy}%\n")
     elif (answer[userinput - 1] == correctanswer):
-        weight[correctanswer] -= 1
-        weight[answer[userinput-1]] -= 1
+        weight[correctanswer] -= 2
         correctnum += 1
         totalnum += 1
     else:
         weight[correctanswer] += 2
         totalnum += 1
-        print("\033[93m  {0} {1}\033[0m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
-        print("\033[93m  {0} {1}\033[0m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
-    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
+        print("\033[93m  {0} {1}\033[97m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
+        print("\033[93m  {0} {1}\033[97m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
+    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
 
 #funtion define (hand write)
 def handwrite(i):
@@ -72,40 +75,41 @@ def handwrite(i):
     if(userinput == vocablist[i]["English"]):
         correctnum += 1
         totalnum += 1
-        print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
+        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
     else:
         totalnum += 1
-        print("\n  {}".format(vocablist[i]["English"]))
-        print(f"--------------------------------------------------------{correctnum}/{totalnum}\n")
+        print("\n\033[93m{}\033[97m".format(vocablist[i]["English"]))
+        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
 
 
 
 #run
 userinputmode = input("enter mode [mc/hw]  \033[32m")
-print("\033[0m")
-if(userinputmode == "mc"):
+print("\033[97m")
+if(userinputmode == "hw"):
+    random.shuffle(vocablist)
+    for i in range(len):    
+        handwrite(i)
+else:
     while (1 == keepgoing):
         mutiple_choice()
         if(weight.count(0) == len):
             break
-else:
-    random.shuffle(vocablist)
-    for i in range(len):    
-        handwrite(i)
+    
 
 accuracy = (correctnum/totalnum)*100
-print(f"accuracy:{accuracy}")
+print(f"\033[93m--accuracy:{accuracy}--\033[97m")
 
 
 """
 #keep/reset weight?
 keepweight = input("keep weight? [y/n]")
 if('y' == keepweight):
-    with open("VocabM4-12.txt", "w", encoding='utf-8') as file:
+    with open("weight.txt", "w", encoding='utf-8') as file:
         for i in range(len):
-            vocablist[i]["weight"] = weight[i]
-            x = json.dumps(vocablist[i])
-            file.write(x)
+            file.write(str(weight[i]))
+            file.write("\n")
+           
 resetweight = input("reset weight? [y/n]")
 if('y' == resetweight):
     with open("VocabM4-12.txt", "w", encoding='utf-8') as file:
