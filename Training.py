@@ -3,7 +3,9 @@ import json
 
 
 #data loading
-vocabfile = open("temp.txt", "r", encoding = 'utf-8')
+file = "TBA.txt"
+vocabfile = open(file, "r", encoding = 'utf-8')
+print(f"using file: {file}")
 x = vocabfile.readlines()
 vocablist = []
 weight = []
@@ -70,7 +72,8 @@ def mutiple_choice():
 def handwrite(i):
     global correctnum
     global totalnum
-    print("{0} {1}_____".format(vocablist[i]["Chinese"], vocablist[i]["English"][:2]))
+    word = vocablist[i]["English"]
+    print("{0} {1}_____{2}".format(vocablist[i]["Chinese"], word[:1], word[-1:]))
     userinput = str(input())
     if(userinput == vocablist[i]["English"]):
         correctnum += 1
