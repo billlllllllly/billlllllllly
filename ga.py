@@ -1,34 +1,37 @@
 import random
 import numpy as np
 
+class ga(individual):
 
-class ga:
+    
+
     def mutation(individual):
-        msi = random.randint(0, len(individual) - 3)
-        mei = msi + 3
-        for i in range(msi, mei, 1):
-            individual[i] = random.randint(0, 10)
+        for cro in individual:
+            for gene in cro:
+                if random.randint(1, 100) == 1:
+                    gene = random.randint(1, 10)
         return individual
+    #ok
 
-    def crossover(x1, x2):
-        target = random.randint(0, len(x1)-1)
+    def crossover(in1, in2):
+        target = random.randint(0, len(in1)-1)
         y1 = []
         y2 = []
-        y1.extend(x1[0:target])
-        y1.extend(x2[target:])
-        y2.extend(x2[0:target])
-        y2.extend(x1[target:])
+        y1.extend(in1[0:target])
+        y1.extend(in2[target:])
+        y2.extend(in2[0:target])
+        y2.extend(in1[target:])
         offspring = [y1, y2]
         return offspring
 
-    #need to alter
+    #need to fix
     def fitness_caculate(testaccuracy):
         rate = []
         for i in testaccuracy:
             rate.append(i**2)
         return rate
 
-    def offspring_making(rate, parents, population = 100, wanttomutate = 1):
+    def reproduct(rate, parents, population = 100, wanttomutate = 1):
         offspring = []
         for i in range(population//2):
             parent_target = random.choices(parents, rate, k = 2)
@@ -42,4 +45,11 @@ class ga:
             offspring.extend(oft)
         return offspring
 
-    
+    def ans(v):
+        max = 0
+        idx = 0
+        for i in range(len(v)):
+            if v[i] > max:
+                idx = i
+        return idx
+
