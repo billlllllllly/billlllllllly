@@ -1,14 +1,15 @@
 import PIL
-from PIL import Image
+from PIL import Image, ImageSequence
+import cv2
 from math import *
 
 zoominrate = 1
 k = float(100) #N/m
 m = float(1) #kg
-dt = 0.001   #s
+dt = 0.1   #s
 x0, y0 = 100, 25
-x = float(100+40)#cm
-y = float(0+30)#cm
+x = float(x0+20)#cm
+y = float(y0+30)#cm
 g = 9.8 #m/s2
 l0 = 20 #cm
 vx = 0.0 #m/s
@@ -37,15 +38,15 @@ p2[x+1, y-1] = (200, 0, 0)
 p2[x+1, y] = (200, 0, 0)
 p2[x+1, y+1] = (200, 0, 0)
 
-while t <= 50:
+while t <= 20:
     l = length(x, y)
     x  += vx*dt + ax*dt*dt/2
     y  += vy*dt + ay*dt*dt/2
-    ax = (k*(l - l0)/100*(50-x)/l)/m
-    ay = (k*(l - l0)/100*(0-y)/l + m*g)/m
+    ax = (k*(l - l0)/100*(x0-x)/l)/m
+    ay = (k*(l - l0)/100*(y0-y)/l + m*g)/m
     vx += ax*dt
     vy += ay*dt
-    #print(f"[{0}{1}]", ax, ay)
+    print(f"[{l}, {ax}, {ay}]")
     
     if floor(x)<sizex and floor(y)<sizey and floor(x)>0 and floor(y)>0:
         p2[floor(x), floor(y)] = (0, 0, 0)
