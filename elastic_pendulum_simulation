@@ -4,7 +4,7 @@ import os
 import xlsxwriter
 from scipy.fft import fft
 
-path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/test'
+path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/simulation2'
 os.chdir(path)
 workbook = xlsxwriter.Workbook('data.xlsx')
 
@@ -12,7 +12,7 @@ def length(x0, xtemp, y0, ytemp):
     temp = sqrt((xtemp-x0)**2 + (ytemp - y0)**2)
     return(temp)
 
-def image(name, xcoor, ycoor):
+def path_image(name, xcoor, ycoor):
     fig = plt.figure()
     ax1 = fig.add_subplot(1,2,1)
     ax2 = fig.add_subplot(1,2,2)
@@ -29,10 +29,12 @@ def image(name, xcoor, ycoor):
     else:
         fig.suptitle('  ',fontsize=30)
     fig.tight_layout()
+    path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/simulation2/path_image'
+    os.chdir(path)
     plt.savefig(f'p{name}model.png')
     plt.close()
 
-def writecoor(name, coordinates):
+def writedata(name, coordinates, fftrawdataX, fftrawdataY):
     worksheet = workbook.add_worksheet(f'example{name}')
     worksheet.write('A1', 'time')
     worksheet.write('B1', 'displacement of X axis')
@@ -51,6 +53,31 @@ def writecoor(name, coordinates):
         worksheet.write(row, col + 2, c[2])
         row += 1
     
+    worksheet.write_column('D2', fftrawdataX)
+    worksheet.write_column('E2', fftrawdataY)
+    
+    worksheet.write_dynamic_array_formula('F2:F6000', '=ABS(D1:D6000)')
+    worksheet.write_dynamic_array_formula('G2:G6000', '=ABS(E1:E6000)')
+
+def FFT_image(name, fftx, ffty):
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1,2,1)
+    ax2 = fig.add_subplot(1,2,2)
+    fre = []
+    for i in range(6000):
+        fre.append(i/60)
+    ax1.plot(fre, fftx)
+    ax2.plot(fre, ffty)
+    ax1.axis([0, 10, 0, 200])
+    ax2.axis([0, 10, 0, 200])
+    ax1.title.set_text('FFT X')
+    ax2.title.set_text('FFT Y')
+    fig.suptitle(f'FFT OF {name}')
+    path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/simulation2/FFT_image'
+    os.chdir(path)
+    plt.savefig(f'FFT{name}model.png')
+    plt.close()
+
 
 def f1(inx, iny):
     k = float(27.84) #N/m
@@ -85,35 +112,39 @@ def f1(inx, iny):
             xcoor.append(xtemp)
             ycoor.append(ytemp)
         t += dt
-    
 
     fftrawdataX = fft(xcoor)
     fftrawdataY = fft(ycoor)
-    #print(fftrawdataY)
-    #worksheet.write_column('D2', fftrawdataX)
-    #worksheet.write_column('E2', fftrawdataY)
+    fftx = []
+    ffty = []
+    
+    for k in fftrawdataX:
+        fftx.append(abs(k.real))
+    for k in fftrawdataY:
+        ffty.append(abs(k.real))
+
     name = f'({inx},{iny})'
-    writecoor(name, coordinates)
-    image(name, xcoor, ycoor)
+    #writedata(name, coordinates, fftrawdataX, fftrawdataY)
+    path_image(name, xcoor, ycoor)
+    FFT_image(name, fftx, ffty)
 
 
 
 #main
 
-i = 0
+i = 5
 while i <= 100:
-    j = 50
+    j = 5
     while j <= 100:
         f1(i, j)
         print('                     ', end='\r')
         print(f" ({i},{j})", end='\r')
-        j += 50
-    i += 50
+        j += 5
+    i += 5
 print('                      ', end='\r')
 print(" --end-- ")
 
-
-#f1(10, 100)
+#f1(10, 50)
 #print("1")
 
 workbook.close()
