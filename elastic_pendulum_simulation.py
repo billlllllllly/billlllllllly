@@ -132,15 +132,13 @@ def f1(inx, iny):
 
 #main
 
-i = 5
-while i <= 100:
-    j = 5
-    while j <= 100:
+for i in range(5, 100+1, 5):
+    for j in range(5, 100+1, 5):
         f1(i, j)
         print('                     ', end='\r')
         print(f" ({i},{j})", end='\r')
-        j += 5
-    i += 5
+#loop end
+
 print('                      ', end='\r')
 print(" --end-- ")
 
