@@ -1,86 +1,119 @@
-import PIL
-from PIL import Image, ImageSequence
-import cv2
-from math import *
-import os, shutil
+import matplotlib.pyplot as plt
+from math import sqrt
+import os
+import xlsxwriter
+from scipy.fft import fft
+
+path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/test'
+os.chdir(path)
+workbook = xlsxwriter.Workbook('data.xlsx')
 
 def length(x0, xtemp, y0, ytemp):
     temp = sqrt((xtemp-x0)**2 + (ytemp - y0)**2)
-    #print(temp)
     return(temp)
 
+def image(name, xcoor, ycoor):
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1,2,1)
+    ax2 = fig.add_subplot(1,2,2)
+
+    ax1.plot(xcoor, ycoor)
+    xmin, xmax, ymin, ymax = ax1.axis()
+    ax1.axis([xmin, xmax, ymax, ymin])
+
+    ax2.plot(xcoor, ycoor)
+    ax2.axis([-1, 1, 1.5, -0.5])
+
+    if ymin < 0:
+        fig.suptitle('ERROR OOR',color='red',fontsize=30)
+    else:
+        fig.suptitle('  ',fontsize=30)
+    fig.tight_layout()
+    plt.savefig(f'p{name}model.png')
+    plt.close()
+
+def writecoor(name, coordinates):
+    worksheet = workbook.add_worksheet(f'example{name}')
+    worksheet.write('A1', 'time')
+    worksheet.write('B1', 'displacement of X axis')
+    worksheet.write('C1', 'displacement of Y axis')
+    worksheet.write('D1', 'raw FFT of X')
+    worksheet.write('E1', 'raw FFt of Y')
+    worksheet.write('F1', 'FFT of X')
+    worksheet.write('G1', 'FFT of Y')
+
+    row = 1
+    col = 0
+    for c in coordinates:
+        #print(c)
+        worksheet.write(row, col, c[0])
+        worksheet.write(row, col + 1, c[1])
+        worksheet.write(row, col + 2, c[2])
+        row += 1
+    
+
 def f1(inx, iny):
-    zoominrate = 1
     k = float(27.84) #N/m
     m = float(0.5) #kg
     dt = 0.0001   #s
-    x0, y0 = 100, 25
-    x = inx #cm
-    y = iny #cm
+    x0, y0 = 0,0
+    x = 0.01*inx #cm2m
+    y = 0.01*iny #cm
     xtemp = float(x + x0)
     ytemp = float(y + y0)
     g = 9.8 #m/s2
-    l0 = 15.8 #cm
+    l0 = 0.158 #m
     vx = 0.0 #m/s
     ax = 0.0 #m/s2
     vy = 0.0 #m/s
     ay = 0.0 #m/s2
     t = 0.0  #s
-    sizex, sizey = 200, 200
-
-    p1 = PIL.Image.new(mode="RGB", size=(sizex, sizey), color = (250, 250, 250))
-    p2 = p1.load()
-
-
+    coordinates = []
+    xcoor = []
+    ycoor = []
 
     while t <= 60:
         l = length(x0, xtemp, y0, ytemp)
-        xtemp  += vx*dt + ax*dt*dt/2
-        ytemp  += vy*dt + ay*dt*dt/2
-        ax = (k*(l - l0)/100*(x0-xtemp)/l)/m
-        ay = (k*(l - l0)/100*(y0-ytemp)/l + m*g)/m
+        xtemp += vx*dt + ax*dt*dt/2
+        ytemp += vy*dt + ay*dt*dt/2
+        ax = (k*(l-l0)*(x0-xtemp)/l)/m
+        ay = (k*(l-l0)*(y0-ytemp)/l + m*g)/m
         vx += ax*dt
         vy += ay*dt
-        #print(f"[{l}, {ax}, {ay}]")
-    
-        if floor(xtemp)<sizex and floor(ytemp)<sizey and floor(xtemp)>0 and floor(ytemp)>0:
-            p2[floor(xtemp), floor(ytemp)] = (0, 0, 0)
+        if (int(t*10000))%100 == 0:
+            coordinates.append([t,xtemp, ytemp])
+            xcoor.append(xtemp)
+            ycoor.append(ytemp)
         t += dt
+    
 
-    #marking initial
-    x += x0
-    y += y0
+    fftrawdataX = fft(xcoor)
+    fftrawdataY = fft(ycoor)
+    #print(fftrawdataY)
+    #worksheet.write_column('D2', fftrawdataX)
+    #worksheet.write_column('E2', fftrawdataY)
+    name = f'({inx},{iny})'
+    writecoor(name, coordinates)
+    image(name, xcoor, ycoor)
 
-    i = x - 1
-    while i <= x+1:
-        j = y - 1
-        while j <= y+1:
-            if i<sizex and i>0 and j<sizey and j>0:
-                p2[i, j] = (200, 0, 0)
-            j+=1
-        i+=1
-            
-    x -= x0
-    y -= y0
-
-
-    #p1.show()
-    path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/模擬'
-    os.chdir(path)
-    p1.save(f"p({x}, {y})model.png")
 
 
 #main
 
-i = 95
+i = 0
 while i <= 100:
-    j = 5
+    j = 50
     while j <= 100:
         f1(i, j)
-        print(f"({i},{j})")
-        j += 5
-    i += 5
+        print('                     ', end='\r')
+        print(f" ({i},{j})", end='\r')
+        j += 50
+    i += 50
+print('                      ', end='\r')
 print(" --end-- ")
 
 
-#f1(40, 30)
+#f1(10, 100)
+#print("1")
+
+workbook.close()
