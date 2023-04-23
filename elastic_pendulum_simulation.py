@@ -1,11 +1,9 @@
 import matplotlib.pyplot as plt
-from matplotlib import cm
 from math import sqrt
 import os
 import xlsxwriter
 from scipy.fft import fft
 import numpy as np
-from scipy.interpolate import griddata
 
 path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/test'
 os.chdir(path)
@@ -71,17 +69,17 @@ def FFT_image(name, fftx, ffty):
         fre.append(i/60)
     ax1.plot(fre, fftx)
     ax2.plot(fre, ffty)
-    ax1.axis([0, 10, 0, 200])
-    ax2.axis([0, 10, 0, 200])
+    ax1.axis([0, 10, 0, 100])
+    ax2.axis([0, 10, 0, 100])
     ax1.title.set_text('FFT X')
     ax2.title.set_text('FFT Y')
     fig.suptitle(f'FFT OF {name}')
-    path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/simulation2/FFT_image'
+    path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/test'
     os.chdir(path)
     plt.savefig(f'FFT{name}model.png')
     plt.close()
 
-def final_3dimage(idx):
+def final_3dimage(idx, name):
     x,y,z = np.array(idx[0]), np.array(idx[1]), np.array(idx[2])
     '''
     xlin = np.linspace(min(x), max(x), 100)
@@ -90,47 +88,96 @@ def final_3dimage(idx):
     Z = griddata(x,y,z,X,Y,'v4')
     '''
     fig = plt.axes(projection='3d')
+    fig.set_xlabel('X axis')
+    fig.set_ylabel('Y axis')
+    fig.set_zlabel('chaos idx')
+    fig.set_zlim3d(0,50)
+    #fig.set_title(f'k = {name}', size = 30)
     fig.plot_trisurf(x, y, z, cmap=plt.cm.CMRmap)
     #fig.contourf(x,y,z,zdir='z',offset=-10, camp=plt.cm.CMRmap)
-    plt.show()
+    plt.tight_layout()
+    plt.savefig(f'final{name}.png')
+    #plt.show()
+    plt.close()
 
 def caosindex(fx, fy):
-    idx = 0
+    idx = 0.0
     for i in range(1, len(fx)-2, 1):
-        if fx[i]>fx[i-1] and fx[i]>fx[i+1]:
+        if fx[i]>fx[i-1] and fx[i]>fx[i+1] and fx[i]<50:
+            idx += 0.001
+        if fx[i]>50 or fy[i]>50:
             idx += 1
     return idx
 
-def f1(inx, iny):
-    k = float(27.84) #N/m
-    m = float(0.5) #kg
+def G2(y,basicvarible):
+    x_d, y_d, x, y  = y[0], y[1], y[2], y[3]
+    l0, k, m, g = basicvarible[0], basicvarible[1], basicvarible[2], basicvarible[3]
+    l = length(0, x, 0, y)
+    x_dd = (k*(l-l0)*(0-x)/l)/m
+    y_dd = (k*(l-l0)*(0-y)/l + m*g)/m
+    return np.array([x_dd, y_dd, x_d, y_d])
+
+def RK4step(motion, dt, basicvarible):
+    k1 = np.array(G2(motion, basicvarible))
+    k2 = np.array(G2(motion+k1*dt/2, basicvarible))
+    k3 = np.array(G2(motion+k2*dt/2, basicvarible))
+    k4 = np.array(G2(motion+k3*dt, basicvarible))
+    temp = (k1+2*k2+2*k3+k4)*dt/6
+    return temp
+
+def full_image(name, xcoor, ycoor, fftx, ffty):
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1,4,1)
+    ax2 = fig.add_subplot(1,4,2)
+    ax3 = fig.add_subplot(1,4,3)
+    ax4 = fig.add_subplot(1,4,4)
+
+    ax1.plot(xcoor, ycoor)
+    xmin, xmax, ymin, ymax = ax1.axis()
+    ax1.axis([xmin, xmax, ymax, ymin])
+    ax2.plot(xcoor, ycoor)
+    ax2.axis([-1, 1, 1.5, -0.5])
+    if ymin < 0:
+        ax2.title.set_text('ERROR OOR',color='red',fontsize=30)
+    else:
+        fig.suptitle('  ',fontsize=30)
+    
+    fre = []
+    for i in range(6000):
+        fre.append(i/60)
+    ax3.plot(fre, fftx)
+    ax4.plot(fre, ffty)
+    ax3.axis([0, 10, 0, 200])
+    ax4.axis([0, 10, 0, 200])
+    ax3.title.set_text('FFT X')
+    ax4.title.set_text('FFT Y')
+    fig.suptitle(f'release point: {name}')
+    fig.tight_layout()
+
+    path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/simulation2/allinone'
+    os.chdir(path)
+    plt.savefig(f'model{name}.png')
+    plt.close()
+
+def simulate(inx, iny, k=27.84, m=0.5, vx=0.0, vy=0.0):
     dt = 0.0001   #s
-    x0, y0 = 0,0
     x = 0.01*inx #cm2m
     y = 0.01*iny #cm2m
     g = 9.8 #m/s2
-    l0 = 0.158 #m
-    vx = 0.0 #m/s
-    ax = 0.0 #m/s2
-    vy = 0.0 #m/s
-    ay = 0.0 #m/s2
+    l0 = 0.15 #m
     t = 0.0  #s
     coordinates = []
     xcoor = []
     ycoor = []
+    motion = np.array([vx, vy, x, y])
+    basicvarible = np.array([l0, k, m, g])
 
     while t <= 60:
-        l = length(x0, x, y0, y)
-        x += vx*dt + ax*dt*dt/2
-        y += vy*dt + ay*dt*dt/2
-        ax = (k*(l-l0)*(x0-x)/l)/m
-        ay = (k*(l-l0)*(y0-y)/l + m*g)/m
-        vx += ax*dt
-        vy += ay*dt
+        motion += RK4step(motion, dt, basicvarible)
         if (int(t*10000))%100 == 0:
-            coordinates.append([t,x, y])
-            xcoor.append(x)
-            ycoor.append(y)
+            coordinates.append([t,motion[2], motion[3]])
+            xcoor.append(motion[2])
+            ycoor.append(motion[3])
         t += dt
 
     fftrawdataX = fft(xcoor)
@@ -147,24 +194,28 @@ def f1(inx, iny):
     #writedata(name, coordinates, fftrawdataX, fftrawdataY)
     #path_image(name, xcoor, ycoor)
     #FFT_image(name, fftx, ffty)
+    #full_image(name, xcoor, ycoor, fftx, ffty)
     return caosindex(fftx, ffty)
     
 def main():
     finalcaosidx = [[],[],[]]
     for i in range(5, 100+1, 5):
         for j in range(5, 100+1, 5):
-            caosidx = f1(i, j)
+            caosidx = simulate(inx=i, iny=j)
             finalcaosidx[0].append(i)
             finalcaosidx[1].append(j)
             finalcaosidx[2].append(caosidx)
             print('                     ', end='\r')
             print(f" ({i},{j})", end='\r')
-    final_3dimage(finalcaosidx)
+
+    name = ' '
+    final_3dimage(finalcaosidx, name)
     print('                      ', end='\r')
-    print(" --end-- ")
+    print(f"{name} --end-- ")
     #f1(10, 50)
     #print("1")
-    workbook.close()
+    #workbook.close()
 
-main()
+print(simulate(inx=0, iny=10, k=20))
+
 #final_3dimage([[1,2],[1,2],[1,2]])
