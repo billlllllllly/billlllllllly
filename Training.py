@@ -1,11 +1,12 @@
 import random
 import json
+import time
 
 
 #data loading
-file = "TBA.txt"
+file = "all1.txt"
 vocabfile = open(file, "r", encoding = 'utf-8')
-print(f"using file: {file}")
+print(f"\nusing file: \033[93m{file}\033[97m")
 x = vocabfile.readlines()
 vocablist = []
 weight = []
@@ -89,6 +90,7 @@ def handwrite(i):
 #run
 userinputmode = input("enter mode [mc/hw]  \033[32m")
 print("\033[97m")
+start_time = time.time()
 if(userinputmode == "hw"):
     random.shuffle(vocablist)
     for i in range(len):    
@@ -99,9 +101,13 @@ else:
         if(weight.count(0) == len):
             break
     
-
-accuracy = (correctnum/totalnum)*100
-print(f"\033[93m--accuracy:{accuracy}--\033[97m")
+end_time = time.time()
+accuracy = str((correctnum/totalnum))[:5]
+mtcpq = str((end_time - start_time)/totalnum)[:4]
+ttc = str(end_time - start_time)[:4]
+print(f"\033[93m-- accuracy: {accuracy} --\033[97m")
+print(f"\033[93m-- mtcpq: {mtcpq} sec --\033[97m")
+print(f"\033[93m-- ttc: {ttc} sec --\033[97m", end='\n\n\r')
 
 
 """
