@@ -99,7 +99,9 @@ else:
         mutiple_choice()
         if(weight.count(0) == len):
             break
-    
+
+
+#result 
 end_time = time.time()
 accuracy = (correctnum/totalnum)
 mtcpq = (end_time - start_time)/totalnum
