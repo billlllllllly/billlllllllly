@@ -4,9 +4,9 @@ import time
 
 
 #data loading
-file = "all1.txt"
+file = "test.txt"
 vocabfile = open(file, "r", encoding = 'utf-8')
-print(f"\nusing file: \033[93m{file}\033[97m")
+print(f"\nusing file: \033[93m{file}\033[0m")
 x = vocabfile.readlines()
 vocablist = []
 weight = []
@@ -65,9 +65,9 @@ def mutiple_choice():
     else:
         weight[correctanswer] += 2
         totalnum += 1
-        print("\033[93m  {0} {1}\033[97m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
-        print("\033[93m  {0} {1}\033[97m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
-    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
+        print("\033[93m  {0} {1}\033[0m".format(vocablist[correctanswer]["English"],vocablist[correctanswer]["Chinese"]))
+        print("\033[93m  {0} {1}\033[0m".format(vocablist[answer[userinput-1]]["English"],vocablist[answer[userinput-1]]["Chinese"]))
+    print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
 
 #funtion define (hand write)
 def handwrite(i):
@@ -79,17 +79,16 @@ def handwrite(i):
     if(userinput == vocablist[i]["English"]):
         correctnum += 1
         totalnum += 1
-        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
+        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
     else:
         totalnum += 1
-        print("\n\033[93m{}\033[97m".format(vocablist[i]["English"]))
-        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[97m")
-
+        print("\n\033[93m{}\033[0m".format(vocablist[i]["English"]))
+        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
 
 
 #run
 userinputmode = input("enter mode [mc/hw]  \033[32m")
-print("\033[97m")
+print("\033[0m")
 start_time = time.time()
 if(userinputmode == "hw"):
     random.shuffle(vocablist)
@@ -102,12 +101,15 @@ else:
             break
     
 end_time = time.time()
-accuracy = str((correctnum/totalnum))[:5]
-mtcpq = str((end_time - start_time)/totalnum)[:4]
-ttc = str(end_time - start_time)[:4]
-print(f"\033[93m-- accuracy: {accuracy} --\033[97m")
-print(f"\033[93m-- mtcpq: {mtcpq} sec --\033[97m")
-print(f"\033[93m-- ttc: {ttc} sec --\033[97m", end='\n\n\r')
+accuracy = (correctnum/totalnum)
+mtcpq = (end_time - start_time)/totalnum
+ttc = end_time - start_time
+print("\033[93m=================================")
+print(f"accuracy: {correctnum}/{totalnum}")
+print("          %03.2f" % accuracy)
+print("mtcpq   : %0.2f sec" % mtcpq)
+print("ttc     : %0.2f sec" % ttc)
+print("=================================\033[0m")
 
 
 """
