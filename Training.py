@@ -1,10 +1,14 @@
 import random
 import json
 import time
+import sys
+import os
 
 
 #data loading
-file = "test.txt"
+path = 'C:/Users/sunfar/Desktop/billy/EnglishVocabTraining/tb'
+os.chdir(path)
+file = "TB4-7~R3.txt"
 vocabfile = open(file, "r", encoding = 'utf-8')
 print(f"\nusing file: \033[93m{file}\033[0m")
 x = vocabfile.readlines()
@@ -75,14 +79,15 @@ def handwrite(i):
     global totalnum
     word = vocablist[i]["English"]
     print("{0} {1}_____{2}".format(vocablist[i]["Chinese"], word[:1], word[-1:]))
-    userinput = str(input())
+    userinput = str(sys.stdin.readline()).replace(' ', '_')[:-1]
     if(userinput == vocablist[i]["English"]):
         correctnum += 1
         totalnum += 1
         print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
     else:
         totalnum += 1
-        print("\n\033[93m{}\033[0m".format(vocablist[i]["English"]))
+        print("\033[93m{}\033[0m".format(vocablist[i]["English"]))
+        input("{0} {1}_____{2}\n".format(vocablist[i]["Chinese"], word[:1], word[-1:]))
         print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
 
 
@@ -99,9 +104,7 @@ else:
         mutiple_choice()
         if(weight.count(0) == len):
             break
-
-
-#result 
+    
 end_time = time.time()
 accuracy = (correctnum/totalnum)
 mtcpq = (end_time - start_time)/totalnum
