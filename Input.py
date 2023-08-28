@@ -1,20 +1,21 @@
 import re
+import os
 
 def getchidx(intxt):
     for i in range(len(intxt)):
         x = re.findall("[a-zA-Z()0-9\'\"\/.~\[\]]", intxt[i])
         if len(intxt[i]) != len(x):
-            print(i)
             return i
 
 
 inputfile = open("VocabInput.txt", "r", encoding='utf-8')
-vocablistfile = open("temp.txt", "w", encoding='utf-8')
+path = 'C:/Users/sunfar/Desktop/billy/EnglishVocabTraining/v'
+os.chdir(path)
+vocablistfile = open("U6-7.txt", "x", encoding='utf-8')
 
 inputfiledata = inputfile.readlines()
 for i in range(len(inputfiledata)):
     word = inputfiledata[i].split()
-    print(word , end='  ')
     chidx = getchidx(word)
 
     vocablistfile.write("{\"English\":\"")
