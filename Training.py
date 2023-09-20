@@ -1,14 +1,13 @@
 import random
 import json
 import time
-import sys
 import os
 
 
 #data loading
-path = 'C:/Users/sunfar/Desktop/billy/EnglishVocabTraining/tb'
+path = 'C:/Users/sunfar/Desktop/billy/EnglishVocabTraining/v'
 os.chdir(path)
-file = "TB4-7~R3.txt"
+file = "U6-9.txt"
 vocabfile = open(file, "r", encoding = 'utf-8')
 print(f"\nusing file: \033[93m{file}\033[0m")
 x = vocabfile.readlines()
@@ -33,6 +32,8 @@ ansappeartime = [0,0,0,0]
 def mutiple_choice():
     global correctnum
     global totalnum
+    global keepgoing
+    global weight
     global keepgoing
     correctanswer = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
     anserror = 1
@@ -74,21 +75,42 @@ def mutiple_choice():
     print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
 
 #funtion define (hand write)
-def handwrite(i):
+def handwrite():
     global correctnum
     global totalnum
-    word = vocablist[i]["English"]
-    print("{0} {1}_____{2}".format(vocablist[i]["Chinese"], word[:1], word[-1:]))
-    userinput = str(sys.stdin.readline()).replace(' ', '_')[:-1]
-    if(userinput == vocablist[i]["English"]):
+    global weight
+    global keepgoing
+    wordidx = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
+    word = vocablist[wordidx]["English"]
+    if word[:1] == '#':
+        weight[wordidx] -= 2
+        return
+    print(vocablist[wordidx]["Chinese"], end = ' ')
+    iscomment = 0
+    focus = ""
+    for L in word.split():
+        if L[:1]=="[" or iscomment==1:
+            print(L, end = ' ')
+            iscomment = 1
+            if L[-1:]==']':
+                iscomment = 0
+        else:
+            focus = L
+            print("{0}_____{1}".format(L[:1], L[-1:]), end = ' ')
+    userinput = str(input("\n"))
+    if userinput == "-1":
+        keepgoing = -1
+        return
+    if(userinput == focus):
         correctnum += 1
         totalnum += 1
-        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
+        weight[wordidx] -= 2
+        print(f"-------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
     else:
         totalnum += 1
-        print("\033[93m{}\033[0m".format(vocablist[i]["English"]))
-        input("{0} {1}_____{2}\n".format(vocablist[i]["Chinese"], word[:1], word[-1:]))
-        print(f"--------------------------------------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
+        print("\033[93m{}\033[0m".format(focus))
+        userinput = str(input())
+        print(f"-------------------------\033[32m{correctnum}/{totalnum}\n \033[0m")
 
 
 #run
@@ -96,9 +118,10 @@ userinputmode = input("enter mode [mc/hw]  \033[32m")
 print("\033[0m")
 start_time = time.time()
 if(userinputmode == "hw"):
-    random.shuffle(vocablist)
-    for i in range(len):    
-        handwrite(i)
+    while (1 == keepgoing):
+        handwrite()
+        if(weight.count(0) == len):
+            break
 else:
     while (1 == keepgoing):
         mutiple_choice()
@@ -108,12 +131,10 @@ else:
 end_time = time.time()
 accuracy = (correctnum/totalnum)
 mtcpq = (end_time - start_time)/totalnum
-ttc = end_time - start_time
 print("\033[93m=================================")
-print(f"accuracy: {correctnum}/{totalnum}")
-print("          %03.2f" % accuracy)
-print("mtcpq   : %0.2f sec" % mtcpq)
-print("ttc     : %0.2f sec" % ttc)
+print("accuracy  : %d/%d" % (correctnum, totalnum))
+print("            %03.2f" % accuracy)
+print("per q.    : %0.2f sec" % mtcpq)
 print("=================================\033[0m")
 
 
