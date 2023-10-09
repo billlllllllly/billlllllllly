@@ -5,20 +5,27 @@ import os
 
 
 #data loading
-path = 'C:/Users/sunfar/Desktop/billy/EnglishVocabTraining/v'
+path = 'C:/Users/sunfar/Desktop/billy/EVT/v'
 os.chdir(path)
-file = "U6-9.txt"
-vocabfile = open(file, "r", encoding = 'utf-8')
-print(f"\nusing file: \033[93m{file}\033[0m")
-x = vocabfile.readlines()
+print(f"path: \033[93m{path}\033[0m")
+
+#files = ["B5-L1,2.txt"]
+files = ["U6-8.txt", "U6-9.txt", "U6-10.txt", "U6-11.txt"]
+#files = ["U6-12.txt", "U6-13.txt", "U6-14.txt", "U6-15.txt"]
+
 vocablist = []
 weight = []
-
-for i in range(len(x)):
-    vocablist.append(json.loads(x[i]))
-    weight.append(vocablist[i]["weight"])
+print("file: \033[93m", end = '')
+print(*files, sep = ', ', end = '')
+print("\033[0m")
+for file in files:
+    vocabfile = open(file, "r", encoding = 'utf-8')
+    x = vocabfile.readlines()
+    for i in range(len(x)): 
+        vocablist.append(json.loads(x[i]))
+        weight.append(vocablist[i]["weight"])
     
-len = len(vocablist)
+l = len(vocablist)
 
 #accuracy
 totalnum = 0
@@ -35,10 +42,10 @@ def mutiple_choice():
     global keepgoing
     global weight
     global keepgoing
-    correctanswer = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
+    correctanswer = random.choices([i for i in range(0,l)], weights=weight, k=1)[0]
     anserror = 1
     while (anserror == 1):
-        answer = random.choices([i for i in range(0,len)], k=3)
+        answer = random.choices([i for i in range(0,l)], k=3)
         if(answer.count(answer[0]) == 1 and answer.count(answer[1]) == 1 and answer.count(correctanswer) == 0):
             anserror = 0
     correctanswerinsertidx = random.randint(0,3)
@@ -80,7 +87,7 @@ def handwrite():
     global totalnum
     global weight
     global keepgoing
-    wordidx = random.choices([i for i in range(0,len)], weights=weight, k=1)[0]
+    wordidx = random.choices([i for i in range(0,l)], weights=weight, k=1)[0]
     word = vocablist[wordidx]["English"]
     if word[:1] == '#':
         weight[wordidx] -= 2
@@ -88,15 +95,20 @@ def handwrite():
     print(vocablist[wordidx]["Chinese"], end = ' ')
     iscomment = 0
     focus = ""
-    for L in word.split():
-        if L[:1]=="[" or iscomment==1:
-            print(L, end = ' ')
-            iscomment = 1
-            if L[-1:]==']':
-                iscomment = 0
-        else:
-            focus = L
-            print("{0}_____{1}".format(L[:1], L[-1:]), end = ' ')
+    if word[0] == '*':
+        focus = word[1:]
+        for s in focus.split():
+            print("{0}_____".format(s[0]), end = ' ')
+    else:
+        for L in word.split():
+            if L[:1]=="[" or iscomment==1:
+                print(L, end = ' ')
+                iscomment = 1
+                if L[-1:]==']':
+                    iscomment = 0
+            else:
+                focus = L
+                print("{0}_____{1}".format(L[:1], L[-1:]), end = ' ')
     userinput = str(input("\n"))
     if userinput == "-1":
         keepgoing = -1
@@ -120,12 +132,12 @@ start_time = time.time()
 if(userinputmode == "hw"):
     while (1 == keepgoing):
         handwrite()
-        if(weight.count(0) == len):
+        if(weight.count(0) == l):
             break
 else:
     while (1 == keepgoing):
         mutiple_choice()
-        if(weight.count(0) == len):
+        if(weight.count(0) == l):
             break
     
 end_time = time.time()
