@@ -9,6 +9,9 @@ path = 'C:/Users/sunfar/Desktop/billy/EVT/v'
 os.chdir(path)
 print(f"path: \033[93m{path}\033[0m")
 
+filepath = 'C:/Users/sunfar/Desktop/billy/EVT/v'
+files = os.listdir(filepath)
+
 #files = ["B5-L1,2.txt"]
 files = ["U6-8.txt", "U6-9.txt", "U6-10.txt", "U6-11.txt"]
 #files = ["U6-12.txt", "U6-13.txt", "U6-14.txt", "U6-15.txt"]
