@@ -7,9 +7,11 @@ import numpy as np
 import csv
 from tools import show_progress
 
+"""
 path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/temp'
 os.chdir(path)
 workbook = xlsxwriter.Workbook('data.xlsx')
+"""
 
 def length(x0=0, xtemp=0, y0=0, ytemp=0):
     temp = sqrt((xtemp-x0)**2 + (ytemp - y0)**2)
@@ -36,6 +38,7 @@ def path_image(name, xcoor, ycoor):
     plt.savefig(os.path.join(path, f'p{name}model.png'))
     plt.close()
 
+"""
 def writedata(name, coordinates, fftrawdataX, fftrawdataY):
     worksheet = workbook.add_worksheet(f'example{name}')
     worksheet.write('A1', 'time')
@@ -60,6 +63,7 @@ def writedata(name, coordinates, fftrawdataX, fftrawdataY):
     
     worksheet.write_dynamic_array_formula('F2:F6000', '=ABS(D1:D6000)')
     worksheet.write_dynamic_array_formula('G2:G6000', '=ABS(E1:E6000)')
+"""
 
 def writedata2(motion_initial, R):
     path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/datasetforregression'
