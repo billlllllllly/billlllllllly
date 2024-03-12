@@ -5,9 +5,8 @@ import numpy as np
 
 
 class EPSdataset(Dataset):
-    def __init__(self, root_dir, csv_file, transfrom=None):
+    def __init__(self, csv_file, transfrom=None):
         super().__init__()
-        self.root_dir = root_dir
         self.annotation = pd.read_csv(csv_file)
         self.transform = transfrom
 
