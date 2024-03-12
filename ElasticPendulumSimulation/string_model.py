@@ -1,17 +1,10 @@
 import matplotlib.pyplot as plt
 from math import sqrt
 import os
-import xlsxwriter
 from scipy.fft import fft
 import numpy as np
 import csv
 from tools import show_progress
-
-"""
-path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/temp'
-os.chdir(path)
-workbook = xlsxwriter.Workbook('data.xlsx')
-"""
 
 def length(x0=0, xtemp=0, y0=0, ytemp=0):
     temp = sqrt((xtemp-x0)**2 + (ytemp - y0)**2)
@@ -37,33 +30,6 @@ def path_image(name, xcoor, ycoor):
     path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/temp'
     plt.savefig(os.path.join(path, f'p{name}model.png'))
     plt.close()
-
-"""
-def writedata(name, coordinates, fftrawdataX, fftrawdataY):
-    worksheet = workbook.add_worksheet(f'example{name}')
-    worksheet.write('A1', 'time')
-    worksheet.write('B1', 'displacement of X axis')
-    worksheet.write('C1', 'displacement of Y axis')
-    worksheet.write('D1', 'raw FFT of X')
-    worksheet.write('E1', 'raw FFt of Y')
-    worksheet.write('F1', 'FFT of X')
-    worksheet.write('G1', 'FFT of Y')
-
-    row = 1
-    col = 0
-    for c in coordinates:
-        #print(c)
-        worksheet.write(row, col, c[0])
-        worksheet.write(row, col + 1, c[1])
-        worksheet.write(row, col + 2, c[2])
-        row += 1
-    
-    worksheet.write_column('D2', fftrawdataX)
-    worksheet.write_column('E2', fftrawdataY)
-    
-    worksheet.write_dynamic_array_formula('F2:F6000', '=ABS(D1:D6000)')
-    worksheet.write_dynamic_array_formula('G2:G6000', '=ABS(E1:E6000)')
-"""
 
 def writedata2(motion_initial, R):
     path = 'C:/Users/sunfar/Desktop/billy/for竹中/物探二/datasetforregression'
