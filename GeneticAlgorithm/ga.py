@@ -8,9 +8,9 @@ class GA:
     def __init__(self,
                  fitness_to_crossover=tools.f2c,
                  fitness_func=tools.method1,
-                 gene_length=100, population_size=1000, generation=1000, mutation_rate=0.01):
+                 gene_length=100, population_size=1000, generation=500, mutation_rate=0.01,
+                 drawresult=False):
         self.f2c = fitness_to_crossover
-        #import fitness func from tools
         self.fitness_func = fitness_func
         self.gene_length = gene_length
         self.population_size = population_size
@@ -20,7 +20,8 @@ class GA:
         self.history_best=[]
         self.history_worst=[]
         self.run()
-        self.draw_result()
+        if drawresult == True:
+            self.draw_result()
 
     def initialize_population(self):
         population = []
@@ -88,9 +89,12 @@ class GA:
 
     def draw_result(self):
         plt.plot(self.history_best, label='best')
-        #plt.plot(self.history_worst, label='worst')
+        plt.plot(self.history_worst, label='worst')
+        plt.xlabel('generation')
+        plt.ylabel('fitness rate')
+        plt.axis([0, self.generation, 0, 1])
+        plt.suptitle("GA test")
+        plt.legend()
         path = 'C:/Users/sunfar/Desktop/billy/genetic _algorithm/figure'
         plt.savefig(os.path.join(path, 'temp002.png'))
         plt.show()
-
-GA()
