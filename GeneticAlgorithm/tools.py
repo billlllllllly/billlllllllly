@@ -17,6 +17,9 @@ def method2(p):
     fitness = sum(p)
     return fitness
 
+def f2c(x):
+    return x
+    
 #tools
 def normolization(r):
     r_normolized = []
