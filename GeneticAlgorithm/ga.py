@@ -17,9 +17,9 @@ class GA:
         self.mutation_rate = mutation_rate
         self.generation = generation
         self.population = self.initialize_population()
-        self.history_best=[]
-        self.history_worst=[]
-        self.run()
+        self.history_best = []
+        self.history_worst = []
+        self.evolve()
         if drawresult == True:
             self.draw_result()
 
@@ -79,7 +79,7 @@ class GA:
             offspring.extend(oft)
         return offspring
 
-    def run(self):
+    def evolve(self):
         for epoch in range(self.generation + 1):
             populationfitness = self.fitness_caculate()
             crossover_rate = self.crossover_rate_caculation(populationfitness)
