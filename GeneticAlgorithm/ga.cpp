@@ -17,15 +17,15 @@ class GAmodule{
     void GAmodule::population_initialize(){};
     void GAmodule::mutation(){};
     void GAmodule::crossover(){};
-    float GAmodule::fitness_caculate(){};
-    float GAmodule::crossoverrate_caculate(){};
+    float GAmodule::fitness_calculate(){};
+    float GAmodule::crossoverrate_calculate(){};
     void GAmodule::reproduct(){
         int offspring[];
     };
     void GAmodule::evolve(){
         for(int epoch = 0; epoch <= generation; epoch++){
-            float populationfitnesss = fitness_caculate();
-            float crossover_rate = crossoverrate_caculate();
+            float populationfitnesss = fitness_calculate();
+            float crossover_rate = crossoverrate_calculate();
             int offspring = reproduct();
             int population = offspring;
         }
