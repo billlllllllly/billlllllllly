@@ -5,8 +5,8 @@ class GAmodule{
     void population_initialize();
     void mutation();
     void crossover();
-    float fitness_caculate();
-    float crossoverrate_caculate();
+    float fitness_calculate();
+    float crossoverrate_calculate();
     void reproduct();
     void evolve();
 }
