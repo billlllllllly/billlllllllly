@@ -22,7 +22,7 @@ def crossover(x1, x2):
     offspring = [y1, y2]
     return offspring
 
-def fitness_caculate(parent):
+def fitness_calculate(parent):
     rate = []
     for p in parent:
         fitness = tools.method1(p)
@@ -61,7 +61,7 @@ def main(generation=1000, population=1000, neuro=100, mutaterate=0.01):
     worstofgeneration = []
     x = []
     for i in range(generation + 1):
-        rate, best, worst = fitness_caculate(parent)
+        rate, best, worst = fitness_calculate(parent)
         offspring = offspring_making(rate, parent, population, mutaterate)
         if i % 10 == 0:
             bestofgeneration.append(best)
