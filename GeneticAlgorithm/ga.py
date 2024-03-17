@@ -49,7 +49,7 @@ class GA:
         y2.extend(in1[target:])
         return [y1, y2]
 
-    def fitness_caculate(self):
+    def fitness_ccalculate(self):
         rate=[]
         for p in self.population:
             fitness = self.fitness_func(p)
@@ -61,7 +61,7 @@ class GA:
             rate[i] = int(np.floor(rate[i]*100))
         return rate
 
-    def crossover_rate_caculation(self, populationfitness):
+    def crossover_rate_calculation(self, populationfitness):
         crossover_rate = []
         for i in populationfitness:
             crossover_rate.append(self.f2c(i))
@@ -81,8 +81,8 @@ class GA:
 
     def evolve(self):
         for epoch in range(self.generation + 1):
-            populationfitness = self.fitness_caculate()
-            crossover_rate = self.crossover_rate_caculation(populationfitness)
+            populationfitness = self.fitness_ccalculate()
+            crossover_rate = self.crossover_rate_calculation(populationfitness)
             offspring = self.reproduct(crossover_rate)
             self.population = offspring
             tools.show_progress(epoch/self.generation)
