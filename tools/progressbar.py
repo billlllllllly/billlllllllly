@@ -1,6 +1,15 @@
+"""
+progress should be a num between 0 and 1
+if cc=1, the '070%' would change its color, otherwise yelow
+if spinner=1, ther will be a spinner 
+
+output be like:
+[########070%##------]    /
+[########100%########]    DONE!
+"""
+
 import random
 from math import floor
-
 def show_progress(progress, cc=1, spinner = 0):
     p = floor(progress*20)
     if p <= 8:
