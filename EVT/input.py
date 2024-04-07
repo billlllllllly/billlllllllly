@@ -3,6 +3,11 @@ import os
 from googletrans import Translator
 
 def getchidx(wordarr):
+    """
+    notice that googletrans must be the version: 3.1.0a0 or there should be errors
+    use ''python -m pip install googletrans==3.1.0a0''
+    or use the commented code below
+    """
     for i in range(len(wordarr)):
         result = Translator().detect(wordarr[i]).lang
         if result != 'en':
