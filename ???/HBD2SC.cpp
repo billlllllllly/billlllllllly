@@ -121,17 +121,17 @@ int main(){
     loadingbar();
     printf("\r                                                  \n\n");
     Sleep(2000);
-    showtxt("Jun. 29, 2024", 70);
+    showtxt("", 70);
     printf("\n\n");
     Sleep(2000);
     printf("\r");
-    showtxt("!!", 2);
+    showtxt("", 2);
     printf("\n\n\n");
     Sleep(2000);
     printf("\r");
     showpic();
     Sleep(2000);
-    singnature("Billy Fan");
+    singnature("");
     cin.ignore();
     return 0;
 }
