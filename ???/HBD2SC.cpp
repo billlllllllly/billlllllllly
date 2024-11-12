@@ -125,7 +125,7 @@ int main(){
     printf("\n\n");
     Sleep(2000);
     printf("\r");
-    showtxt("!!!HAPPY BIRTHDAY, SANDY CHEN!!!", 2);
+    showtxt("!!", 2);
     printf("\n\n\n");
     Sleep(2000);
     printf("\r");
