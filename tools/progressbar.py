@@ -1,9 +1,9 @@
 """
-progress should be a num between 0 and 1
+progress should be a float between 0 and 1
 if cc=1, the '070%' would change its color, otherwise yelow
 if spinner=1, ther will be a spinner 
 
-output be like:
+output:
 [########070%##------]    /
 [########100%########]    DONE!
 """
