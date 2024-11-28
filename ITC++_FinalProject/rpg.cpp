@@ -22,9 +22,9 @@ string RPG::txtlineprocess(string str, string key){
             continue;
         }
         if((str[i]=='.')||(str[i]=='?')||(str[i]=='!')){
+            flag = 0;
             dumping(key, value);
             value = {str[i]};
-            //value = "\b" + value;
             dumping(key, value);
         }      
     }
@@ -61,14 +61,17 @@ void RPG::fileprocess(string fileName){
 
 string RPG::wordGenerator(string key, int futher){
     int size = wordMap[key].size();
-    string result = wordMap[key][rand()%size];
+    //srand(788);
+    int idx = rand()%size;
+    //cout << idx << '\n';
+    string result = wordMap[key][idx];
     return result;
 }
 //finished
 
 void RPG::paragraphGenerator(int pLength, string outputFileName){
     string W = wordGenerator(".", 1);
-    bool newline = 0;
+    bool newline = 1;
     string sentence = "";
     for(int i=1; i<pLength; i++){
         if(W!="." && W!="?" && W!="!" && newline!=1)
@@ -80,11 +83,10 @@ void RPG::paragraphGenerator(int pLength, string outputFileName){
             if(W=="." || W=="?" || W=="!"){
                 sentence += W;
                 W = wordGenerator(W, 1);
-                //W = capitalize(W);
             }
-            sentence += "\n";
             newline = 1;
             fileout(sentence, outputFileName);
+            sentence = "";
         }
     }
     return;
@@ -93,8 +95,8 @@ void RPG::paragraphGenerator(int pLength, string outputFileName){
 
 void RPG::fileout(string str, string outputFileName){
     ofstream fileout2;
-    fileout2.open(outputFileName);
-    fileout2 << str;
+    fileout2.open(outputFileName, ios::app);
+    fileout2 << "\n" << str;
     fileout2.flush();
     fileout2.close();
     return;
@@ -103,12 +105,20 @@ void RPG::fileout(string str, string outputFileName){
 
 void RPG::begin(string fileName, int targetlength){
     fileprocess(fileName);
+    
+    //write title
+    ofstream fileout2;
+    fileout2.open("finalout.txt");
+    fileout2 << "-----FINAL GENERATED TEXT-----";
+    fileout2.flush();
+    fileout2.close();
+
     paragraphGenerator(targetlength, "finalout.txt");
     return;
 }
 //finished
 
-void RPG::test(int samplelength){
+void RPG::wordMapFileout(){
     ofstream fileout1;
     fileout1.open("wordmap.txt");
     for(const auto element : wordMap){
@@ -120,5 +130,20 @@ void RPG::test(int samplelength){
         fileout1.flush();
     }
     fileout1.close();
+    return;
+}
+//finished
+
+void RPG::sentenceGenerator(){
+    vector<string> sentence;
+    string W = wordGenerator(".", 1);
+    //while (){
+    //}
+    return;
+}
+
+
+
+void RPG::test(){
     return;
 }

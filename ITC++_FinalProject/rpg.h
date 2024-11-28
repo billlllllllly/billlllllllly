@@ -7,9 +7,11 @@
 #include <iomanip>
 #include <map>
 #include <random>
+#include <ctime>
+#include <cstdlib>
 using namespace std;
 
-class RPG{
+class RPG(aa){
     private:
     map<string, vector<string> > wordMap;
     string L = ".";
@@ -22,5 +24,8 @@ class RPG{
     string wordGenerator(string key, int futher);
     void paragraphGenerator(int pLength, string outputFileName);
     void fileout(string str, string outputFileName);
-    void test(int smaplelength);
+    void wordMapFileout();
+    void test();
+
+    void sentenceGenerator();
 };

@@ -19,5 +19,5 @@ string capitalize(string str){
     for(int i=1; i<str.length(); i++){
         temp += str[i];
     }
-    return temp;
+    return (string)temp;
 }
