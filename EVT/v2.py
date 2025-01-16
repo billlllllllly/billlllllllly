@@ -109,7 +109,7 @@ def multiple_choice(vocablist, weight, correctnum, wrongnum, totalnum, wa):
             print(f"({i+1}) {vocablist[ans][lanchoice[1 - target_language_idx]]}")
         key = msvcrt.getch()
 
-    wa = ''
+    wa = "\n"
     if (keyreserve == correct_idx):
         weight[correctanswer] -= 2
         correctnum += 1
@@ -156,7 +156,7 @@ def main():
     print_file(filepath)
 
     correctnum = wrongnum = totalnum = 0
-    wa = ""
+    wa = "\n"
     start_time = time.time()
 
     mode = input("Enter mode [mc/hw]: \033[92m").strip()
