@@ -1,6 +1,6 @@
-controller:
-  maxForce:
-    max magnitude of the output
+controller:br /
+  maxForce:br /
+    max magnitude of the outputbr /
   targetMode:
     1: square wave
     2: sine wave
