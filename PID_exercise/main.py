@@ -25,12 +25,6 @@ class DDW2(DataDisplayWindow):
         self.line1_val.append(self.controller.target)
         self.line2_val.append(self.model_obj.position)
 
-    def exit_application(self):
-        # Exit the application safely
-        print("Exiting application...")
-        self.close()
-
-
 def main():
     app = QApplication(sys.argv)
     window = DDW2()
